@@ -22,7 +22,7 @@ function NavBar() {
       </Avatar>
 
       <Flex align={"center"} justify={"between"} width={"410px"}>
-        <RoundButton iconUrl={homeIcon} />
+        <RoundButton redirect="/" iconUrl={homeIcon} />
         <Box maxWidth="370px">
           <TextField.Root
             placeholder="What do you want to listen?"

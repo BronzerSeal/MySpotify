@@ -86,4 +86,42 @@ router.get("/randomArtists", async (req, res) => {
   }
 });
 
+// Маршрут для топ-10 треков артиста
+router.get("/:id/top-tracks", async (req, res) => {
+  try {
+    const artistId = req.params.id;
+    const accessToken = await getAccessToken();
+
+    const response = await axios.get(
+      `https://api.spotify.com/v1/artists/${artistId}/top-tracks?market=Us`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    // Формируем только нужные поля для фронтенда
+    // const topTracks = response.data.tracks.slice(0, 10).map((track) => ({
+    //   id: track.id,
+    //   name: track.name,
+    //   album: {
+    //     name: track.album.name,
+    //     image: track.album.images[0]?.url,
+    //   },
+    //   preview_url: track.preview_url,
+    //   spotify_url: track.external_urls.spotify,
+    // }));
+
+    // res.json(topTracks);
+    res.json(response.data.tracks);
+  } catch (error) {
+    console.error(
+      "Ошибка при получении топ-треков артиста:",
+      error.response?.data || error.message
+    );
+    res.status(500).json({ error: "Не удалось получить топ-треки артиста" });
+  }
+});
+
 module.exports = router;

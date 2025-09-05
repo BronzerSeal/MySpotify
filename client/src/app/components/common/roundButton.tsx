@@ -1,11 +1,14 @@
 import { Flex } from "@radix-ui/themes";
 import type { FC } from "react";
+import { useNavigate } from "react-router-dom";
 
 type RoundButtonProps = {
   iconUrl: string;
+  redirect: string;
 };
 
-const RoundButton: FC<RoundButtonProps> = ({ iconUrl }) => {
+const RoundButton: FC<RoundButtonProps> = ({ iconUrl, redirect }) => {
+  const navigate = useNavigate();
   return (
     <Flex
       width={"50px"}
@@ -18,6 +21,7 @@ const RoundButton: FC<RoundButtonProps> = ({ iconUrl }) => {
         borderRadius: "48%",
         cursor: "pointer",
       }}
+      onClick={() => navigate("")}
     >
       <img
         src={iconUrl}

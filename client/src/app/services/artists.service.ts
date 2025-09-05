@@ -25,6 +25,10 @@ const artistService = {
     const data = await httpService.get(artistEndpoint + "randomArtists");
     return data.data;
   },
+  getArtistTopTenTracksbyId: async (id: string) => {
+    const { data } = await httpService.get(artistEndpoint + id + "/top-tracks");
+    return data;
+  },
 };
 
 export default artistService;

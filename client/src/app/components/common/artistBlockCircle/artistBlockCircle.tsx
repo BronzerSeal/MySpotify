@@ -18,7 +18,13 @@ const ArtistBlockCircle: FC<ArtistBlockProps> = ({ image, name, who }) => {
       align={"center"}
       className="BgGrayChange"
     >
-      <Flex direction={"column"} pt={"2"} width={"180px"} height={"240px"}>
+      <Flex
+        direction={"column"}
+        justify={"center"}
+        pt={"2"}
+        width={"180px"}
+        height={"240px"}
+      >
         <div className="artist-img-wrapper">
           <img
             src={image}
@@ -42,10 +48,10 @@ const ArtistBlockCircle: FC<ArtistBlockProps> = ({ image, name, who }) => {
             </svg>
           </div>
         </div>
-        <Text ml={"3"} weight={"bold"}>
+        <Text ml={"4"} weight={"bold"}>
           {name}
         </Text>
-        <Text ml={"3"} color="gray">
+        <Text ml={"4"} color="gray">
           {who}
         </Text>
       </Flex>
