@@ -65,4 +65,53 @@ router.get("/randomTracks", async (req, res) => {
   }
 });
 
+//получения звука для трека
+router.get("/getAudio", async (req, res) => {
+  try {
+    const { q } = req.query;
+
+    const response = await axios.get(
+      `https://api.deezer.com/search/track?q=${encodeURIComponent(q)}`
+    );
+
+    res.json(response.data.data[0]);
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    res.status(500).json({ error: "Не удалось найти трек" });
+  }
+});
+
+// получения звука для трека с доп проверкой артиста
+router.get("/getAudioPlusArtist", async (req, res) => {
+  try {
+    const { track, artist } = req.query;
+
+    if (!track || !artist) {
+      return res.status(400).json({ error: "Нужно передать track и artist" });
+    }
+
+    const query = `${track} ${artist}`;
+    const response = await axios.get(
+      `https://api.deezer.com/search/track?q=${encodeURIComponent(query)}`
+    );
+
+    const results = response.data.data;
+
+    if (!results.length) {
+      return res.status(404).json({ error: "Трек не найден" });
+    }
+
+    // можно дополнительно проверить совпадение артиста
+    const found =
+      results.find(
+        (r) => r.artist.name.toLowerCase() === artist.toLowerCase()
+      ) || results[0];
+
+    res.json(found);
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    res.status(500).json({ error: "Не удалось найти трек" });
+  }
+});
+
 module.exports = router;

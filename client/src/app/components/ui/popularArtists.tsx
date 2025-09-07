@@ -16,7 +16,9 @@ const PopularArtists = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const handleCardClick = (id: string) => {
-    navigate("/artist", { state: artists.find((artist) => artist.id === id) });
+    navigate(`/artist/${id}`, {
+      state: artists.find((artist) => artist.id === id),
+    });
   };
 
   useEffect(() => {

@@ -1,4 +1,5 @@
-My spotify:
+to run the project you need to:
 
-to run you need to change SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET
-(you can get it on sporify WEB api
+1. Create a spotify account and go to spotify web api
+2. Create an application in it
+3. replace SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET with yours

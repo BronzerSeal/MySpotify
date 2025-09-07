@@ -29,6 +29,12 @@ const artistService = {
     const { data } = await httpService.get(artistEndpoint + id + "/top-tracks");
     return data;
   },
+  getArtistTopMusicById: async (id: string) => {
+    const { data } = await httpService.get(
+      artistEndpoint + id + "/latest-albums"
+    );
+    return data;
+  },
 };
 
 export default artistService;

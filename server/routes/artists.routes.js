@@ -124,4 +124,39 @@ router.get("/:id/top-tracks", async (req, res) => {
   }
 });
 
+// Получение 10 последних альбомов артиста
+router.get("/:id/latest-albums", async (req, res) => {
+  try {
+    const { id } = req.params; // ID артиста
+    const accessToken = await getAccessToken();
+
+    const response = await axios.get(
+      `https://api.spotify.com/v1/artists/${id}/albums`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          limit: 10,
+          include_groups: "album,single",
+          market: "US",
+          // Можно добавить offset, если нужно пагинировать
+        },
+      }
+    );
+
+    // Сортировка по дате релиза (по убыванию)
+    const sortedAlbums = response.data.items.sort(
+      (a, b) => new Date(b.release_date) - new Date(a.release_date)
+    );
+
+    res.json(sortedAlbums);
+  } catch (error) {
+    console.error(error.response?.data || error.message);
+    res.status(500).json({ error: "Ошибка при получении альбомов" });
+  }
+});
+
+module.exports = router;
+
 module.exports = router;
