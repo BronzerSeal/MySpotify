@@ -3,8 +3,27 @@ import { Avatar, AvatarFallback, AvatarImage } from "../common/avatar";
 import RoundButton from "../common/roundButton";
 import { Search } from "lucide-react";
 import homeIcon from "../../img/home-icon.png";
+import { useNavigate } from "react-router-dom";
+import { useState, type ChangeEvent } from "react";
 
 function NavBar() {
+  const navigate = useNavigate();
+  const [value, setValue] = useState("");
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+  };
+
+  const handleSearch = (text: string) => {
+    navigate(`/search/${text}`);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch(value);
+    }
+  };
+
   return (
     <Flex
       justify={"between"}
@@ -25,6 +44,9 @@ function NavBar() {
         <RoundButton redirect="/" iconUrl={homeIcon} />
         <Box maxWidth="370px">
           <TextField.Root
+            onKeyDown={handleKeyDown}
+            value={value}
+            onInput={onChange}
             placeholder="What do you want to listen?"
             size="3"
             style={{ width: "350px", height: "50px" }}

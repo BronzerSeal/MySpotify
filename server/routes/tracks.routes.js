@@ -107,7 +107,15 @@ router.get("/getAudioPlusArtist", async (req, res) => {
         (r) => r.artist.name.toLowerCase() === artist.toLowerCase()
       ) || results[0];
 
-    res.json(found);
+    if (!response.data.data.length) {
+      return res.status(404).json({ error: "Not found" });
+    }
+
+    const formatFound = {
+      preview: found.preview,
+    };
+
+    res.json(formatFound);
   } catch (err) {
     console.error(err.response?.data || err.message);
     res.status(500).json({ error: "Не удалось найти трек" });

@@ -13,7 +13,7 @@ const artistService = {
     const { data } = await httpService.get(
       artistEndpoint + "searchArtistByName?q=" + name
     );
-    return data;
+    return data[0];
   },
   getArtistsByWord: async (word: string) => {
     const { data } = await httpService.get(
@@ -27,6 +27,12 @@ const artistService = {
   },
   getArtistTopTenTracksbyId: async (id: string) => {
     const { data } = await httpService.get(artistEndpoint + id + "/top-tracks");
+    return data;
+  },
+  getArtistTopTracksSearch: async (id: string) => {
+    const { data } = await httpService.get(
+      artistEndpoint + id + "/top-tracks-search"
+    );
     return data;
   },
   getArtistTopMusicById: async (id: string) => {

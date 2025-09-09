@@ -3,12 +3,13 @@ import { Play, Pause, SkipBack, SkipForward, Volume2 } from "lucide-react";
 import { Slider } from "../common/slider";
 import { Button } from "../common/button";
 import { formatTimeSec } from "@/app/utils/trackTime";
+import { toast } from "react-toastify";
 
 type Props = {
   title: string;
   artist: string;
   audioImg: string;
-  preview: string; // mp3 из Deezer API
+  preview: string;
 };
 
 export default function AudioPlayer({
@@ -39,6 +40,20 @@ export default function AudioPlayer({
       audioRef.current.volume = volume;
     }
   }, [volume]);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.load();
+      audioRef.current
+        .play()
+        .then(() => {
+          setIsPlaying(true);
+        })
+        .catch((err) => {
+          toast("Автовоспроизведение заблокировано браузером:", err);
+        });
+    }
+  }, [preview]);
 
   return (
     <div className="flex items-center justify-between gap-4 p-4 rounded-2xl shadow-md bg-neutral-900 text-white  w-full ">

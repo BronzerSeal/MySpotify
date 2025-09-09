@@ -124,6 +124,42 @@ router.get("/:id/top-tracks", async (req, res) => {
   }
 });
 
+// Маршрут для топ-4 треков артиста для search
+router.get("/:id/top-tracks-search", async (req, res) => {
+  try {
+    const artistId = req.params.id;
+    const accessToken = await getAccessToken();
+
+    const response = await axios.get(
+      `https://api.spotify.com/v1/artists/${artistId}/top-tracks?market=Us`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    const topTracks = response.data.tracks.slice(0, 4);
+
+    // Формируем только нужные поля для фронтенда
+    const formatTopTracks = topTracks.map((track) => ({
+      id: track.id,
+      name: track.name,
+      image: track.album.images[0]?.url,
+      artistName: track.artists[0].name,
+      duration_ms: track.duration_ms,
+    }));
+
+    res.json(formatTopTracks);
+  } catch (error) {
+    console.error(
+      "Ошибка при получении топ-треков артиста:",
+      error.response?.data || error.message
+    );
+    res.status(500).json({ error: "Не удалось получить топ-треки артиста" });
+  }
+});
+
 // Получение 10 последних альбомов артиста
 router.get("/:id/latest-albums", async (req, res) => {
   try {

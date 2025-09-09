@@ -1,0 +1,21 @@
+.BgSearchGrayChange {
+  background: rgb(40, 40, 46);
+}
+
+.BgSearchGrayChange:hover {
+  background: rgb(46, 46, 53);
+  border-radius: 7px;
+}
+
+.artist-search-img-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 120px;
+  height: 110px;
+}
+/* показываем при наведении на всю карточку */
+.BgSearchGrayChange:hover .play-circle {
+  opacity: 1;
+  transform: scale(1);
+}

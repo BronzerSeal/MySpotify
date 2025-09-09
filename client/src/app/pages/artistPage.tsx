@@ -1,4 +1,4 @@
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Vibrant } from "node-vibrant/browser";
 import Silk from "../components/common/Silk.js";
@@ -67,30 +67,31 @@ const ArtistPage = () => {
   const getAudioForTrack = async ({
     name,
     img,
-    trackName,
     artistName,
   }: {
     name: string;
     img?: string;
-    trackName?: string;
     artistName: string;
   }) => {
-    const audio = await tracksService.getAudioForTreckByNamePlusArtist(
-      name,
-      artistName
-    );
-    if (audio) {
-      setPlayingTrack({
-        ...audio,
-        spotifyImg: img,
-        spotifyTrackName: trackName,
-      });
-    } else {
-      setPlayingTrack(null);
+    try {
+      const audio = await tracksService.getAudioForTreckByNamePlusArtist(
+        name,
+        artistName
+      );
+      if (audio) {
+        setPlayingTrack({
+          ...audio,
+          spotifyImg: img,
+          spotifyTrackName: name,
+        });
+      } else {
+        setPlayingTrack(null);
+      }
+    } catch (err) {
       toast("Sorry not found track in base. Try another one ;)");
     }
   };
-
+  console.log(playingTrack);
   return (
     <>
       <div style={{ position: "relative", width: "100%", height: "400px" }}>
@@ -138,7 +139,6 @@ const ArtistPage = () => {
                   getAudioForTrack({
                     name: track.name,
                     img: track.album.images[0].url,
-                    trackName: track.name,
                     artistName: track.artists[0].name,
                   })
                 }

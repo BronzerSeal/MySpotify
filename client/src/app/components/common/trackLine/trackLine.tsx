@@ -1,10 +1,10 @@
-import { Flex, Text } from "@radix-ui/themes";
+import { Text } from "@radix-ui/themes";
 import "./trackLine.css";
 import trackTime from "@/app/utils/trackTime";
 import type { FC } from "react";
 
 type TrackLineProps = {
-  num: number;
+  num?: number;
   img: string;
   name: string;
   views: number;
@@ -26,9 +26,11 @@ const TrackLine: FC<TrackLineProps> = ({ num, img, name, views, time }) => {
         margin: "6px 0",
       }}
     >
-      <Text size="4" color="gray">
-        {num}
-      </Text>
+      {num && (
+        <Text size="4" color="gray">
+          {num}
+        </Text>
+      )}
 
       <img width="40" src={img} alt="" style={{ borderRadius: "4px" }} />
 
