@@ -9,10 +9,12 @@ import {
 import { useEffect, useState } from "react";
 import AlbumBlockCircle from "../common/albumBlock/albumBlock";
 import albumsService from "@/app/services/albums.service";
+import { useNavigate } from "react-router-dom";
 
 const PopularAlbums = () => {
   const [albums, setAlbums] = useState<SpotifyApi.AlbumObjectFull[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getArtists() {
@@ -37,13 +39,15 @@ const PopularAlbums = () => {
           <CarouselContent>
             {albums.map((album) => (
               <CarouselItem key={album.id} className="basis-1/6">
-                <AlbumBlockCircle
-                  image={
-                    album.images[1]?.url || "https://github.com/shadcn.png"
-                  }
-                  name={album.name}
-                  who={album.type}
-                />
+                <div onClick={() => navigate(`/album/${album.id}`)}>
+                  <AlbumBlockCircle
+                    image={
+                      album.images[1]?.url || "https://github.com/shadcn.png"
+                    }
+                    name={album.name}
+                    who={album.type}
+                  />
+                </div>
               </CarouselItem>
             ))}
           </CarouselContent>

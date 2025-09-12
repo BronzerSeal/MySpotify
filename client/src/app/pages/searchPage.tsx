@@ -7,6 +7,13 @@ import SearchTrackLine from "../components/common/search/searchTracks/searchtrac
 import AudioPlayer from "../components/ui/audioPlayer";
 import tracksService from "../services/tracks.service";
 import { toast } from "react-toastify";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselNext,
+  CarouselPrevious,
+} from "../components/common/carousel";
+import AlbumBlockCircle from "../components/common/albumBlock/albumBlock";
 
 type SearchTrack = {
   id: string;
@@ -18,15 +25,21 @@ type SearchTrack = {
 
 const SearchPage = () => {
   const { text } = useParams<{ text: string }>();
+  const navigate = useNavigate();
   const [artist, setArtist] = useState<SpotifyApi.ArtistObjectFull>();
   const [popularTracks, setPopularTracks] = useState<SearchTrack[]>();
   const [playingTrack, setPlayingTrack] = useState<any>();
-  const navigate = useNavigate();
+  const [artistMusic, setArtistMusic] =
+    useState<SpotifyApi.AlbumObjectFull[]>();
 
   const handleCardClick = (id: string) => {
     navigate(`/artist/${id}`, {
       state: artist!.id,
     });
+  };
+
+  const handleAlbumClick = (id: string) => {
+    navigate(`/album/${id}`);
   };
 
   useEffect(() => {
@@ -45,6 +58,16 @@ const SearchPage = () => {
       setPopularTracks(tracks);
     }
     if (artist) getTracks(artist.id);
+  }, [artist]);
+
+  useEffect(() => {
+    async function getMusic() {
+      if (artist) {
+        const music = await artistService.getArtistTopMusicById(artist.id);
+        setArtistMusic(music);
+      }
+    }
+    getMusic();
   }, [artist]);
 
   const getAudioForTrack = async ({
@@ -103,7 +126,7 @@ const SearchPage = () => {
             )}
           </Flex>
           <Flex direction={"column"} ml={"4"}>
-            <Text as="div" size={"6"} weight={"bold"} mb={"3"}>
+            <Text as="div" size={"6"} weight={"bold"} mb={"5"}>
               tracks
             </Text>
             {popularTracks?.map((track) => (
@@ -126,6 +149,29 @@ const SearchPage = () => {
               </div>
             ))}
           </Flex>
+        </Flex>
+        <Text as="div" size={"6"} weight={"bold"} mb={"5"}>
+          music
+        </Text>
+        <Flex>
+          <Carousel opts={{ align: "start" }} className="w-full max-w-[1000px]">
+            <CarouselContent>
+              {artistMusic
+                ? artistMusic.map((music, index) => (
+                    <div key={index} onClick={() => handleAlbumClick(music.id)}>
+                      <AlbumBlockCircle
+                        image={music.images[0].url}
+                        name={music.name}
+                        who={music.type}
+                      />
+                    </div>
+                  ))
+                : "Loading"}
+            </CarouselContent>
+
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
         </Flex>
       </Container>
       {playingTrack && artist && (

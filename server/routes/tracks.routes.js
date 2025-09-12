@@ -113,6 +113,7 @@ router.get("/getAudioPlusArtist", async (req, res) => {
 
     const formatFound = {
       preview: found.preview,
+      dezeerImg: found.album.cover_big,
     };
 
     res.json(formatFound);

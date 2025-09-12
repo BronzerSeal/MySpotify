@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Vibrant } from "node-vibrant/browser";
 import Silk from "../components/common/Silk.js";
@@ -20,6 +20,7 @@ import { toast } from "react-toastify";
 
 const ArtistPage = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [artist, setArtist] = useState<SpotifyApi.ArtistObjectFull>();
 
   const [bgColor, setbgColor] = useState("");
@@ -29,6 +30,10 @@ const ArtistPage = () => {
     useState<SpotifyApi.AlbumObjectFull[]>();
 
   const [playingTrack, setPlayingTrack] = useState<any>();
+
+  const handleAlbumClick = (id: string) => {
+    navigate(`/album/${id}`);
+  };
 
   useEffect(() => {
     async function getArtist() {
@@ -91,7 +96,6 @@ const ArtistPage = () => {
       toast("Sorry not found track in base. Try another one ;)");
     }
   };
-  console.log(playingTrack);
   return (
     <>
       <div style={{ position: "relative", width: "100%", height: "400px" }}>
@@ -162,12 +166,13 @@ const ArtistPage = () => {
             <CarouselContent>
               {artistMusic
                 ? artistMusic.map((music, index) => (
-                    <AlbumBlockCircle
-                      key={index}
-                      image={music.images[0].url}
-                      name={music.name}
-                      who={music.type}
-                    />
+                    <div key={index} onClick={() => handleAlbumClick(music.id)}>
+                      <AlbumBlockCircle
+                        image={music.images[0].url}
+                        name={music.name}
+                        who={music.type}
+                      />
+                    </div>
                   ))
                 : "Loading"}
             </CarouselContent>

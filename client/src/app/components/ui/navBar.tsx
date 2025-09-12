@@ -16,6 +16,7 @@ function NavBar() {
 
   const handleSearch = (text: string) => {
     navigate(`/search/${text}`);
+    setValue("");
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
