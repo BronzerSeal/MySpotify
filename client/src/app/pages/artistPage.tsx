@@ -5,7 +5,6 @@ import Silk from "../components/common/Silk.js";
 import { Container, Flex, Text } from "@radix-ui/themes";
 import { Badge } from "../components/common/badge.js";
 import { BadgeCheckIcon } from "lucide-react";
-import artistService from "../services/artists.service.js";
 import TrackLine from "../components/common/trackLine/trackLine.js";
 import AlbumBlockCircle from "../components/common/albumBlock/albumBlock.js";
 import {
@@ -15,33 +14,21 @@ import {
   CarouselPrevious,
 } from "../components/common/carousel";
 import AudioPlayer from "../components/ui/audioPlayer.js";
-import tracksService from "../services/tracks.service.js";
-import { toast } from "react-toastify";
+import { useTrackPlayer } from "../hooks/useTrackPlayer.js";
+import { useArtist } from "../hooks/useArtist.js";
 
 const ArtistPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [artist, setArtist] = useState<SpotifyApi.ArtistObjectFull>();
+  const { artist, popularTracks, artistMusic } = useArtist(id!);
 
   const [bgColor, setbgColor] = useState("");
-  const [popularTracks, setPopularTracks] =
-    useState<SpotifyApi.TrackObjectFull[]>();
-  const [artistMusic, setArtistMusic] =
-    useState<SpotifyApi.AlbumObjectFull[]>();
 
-  const [playingTrack, setPlayingTrack] = useState<any>();
+  const { playingTrack, getAudioForTrack } = useTrackPlayer();
 
   const handleAlbumClick = (id: string) => {
     navigate(`/album/${id}`);
   };
-
-  useEffect(() => {
-    async function getArtist() {
-      const singer = await artistService.getArtistById(id!);
-      setArtist(singer);
-    }
-    getArtist();
-  }, []);
 
   useEffect(() => {
     if (artist) {
@@ -53,49 +40,6 @@ const ArtistPage = () => {
     }
   }, [artist]);
 
-  useEffect(() => {
-    async function getTracks() {
-      const tracks = await artistService.getArtistTopTenTracksbyId(id!);
-      setPopularTracks(tracks);
-    }
-    getTracks();
-  }, []);
-
-  useEffect(() => {
-    async function getMusic() {
-      const music = await artistService.getArtistTopMusicById(id!);
-      setArtistMusic(music);
-    }
-    getMusic();
-  }, []);
-
-  const getAudioForTrack = async ({
-    name,
-    img,
-    artistName,
-  }: {
-    name: string;
-    img?: string;
-    artistName: string;
-  }) => {
-    try {
-      const audio = await tracksService.getAudioForTreckByNamePlusArtist(
-        name,
-        artistName
-      );
-      if (audio) {
-        setPlayingTrack({
-          ...audio,
-          spotifyImg: img,
-          spotifyTrackName: name,
-        });
-      } else {
-        setPlayingTrack(null);
-      }
-    } catch (err) {
-      toast("Sorry not found track in base. Try another one ;)");
-    }
-  };
   return (
     <>
       <div style={{ position: "relative", width: "100%", height: "400px" }}>
@@ -142,7 +86,7 @@ const ArtistPage = () => {
                 onClick={() =>
                   getAudioForTrack({
                     name: track.name,
-                    img: track.album.images[0].url,
+                    spotifyImg: track.album.images[0].url,
                     artistName: track.artists[0].name,
                   })
                 }
@@ -158,29 +102,39 @@ const ArtistPage = () => {
             ))
           : "Loading"}
 
-        <Text as="div" size={"6"} weight={"bold"} mt={"5"} mb={"2"}>
-          Music
-        </Text>
-        <Flex>
-          <Carousel opts={{ align: "start" }} className="w-full max-w-[1000px]">
-            <CarouselContent>
-              {artistMusic
-                ? artistMusic.map((music, index) => (
-                    <div key={index} onClick={() => handleAlbumClick(music.id)}>
-                      <AlbumBlockCircle
-                        image={music.images[0].url}
-                        name={music.name}
-                        who={music.type}
-                      />
-                    </div>
-                  ))
-                : "Loading"}
-            </CarouselContent>
+        {artistMusic.length > 0 && (
+          <>
+            <Text as="div" size={"6"} weight={"bold"} mt={"5"} mb={"2"}>
+              Music
+            </Text>
+            <Flex>
+              <Carousel
+                opts={{ align: "start" }}
+                className="w-full max-w-[1000px]"
+              >
+                <CarouselContent>
+                  {artistMusic
+                    ? artistMusic.map((music, index) => (
+                        <div
+                          key={index}
+                          onClick={() => handleAlbumClick(music.id)}
+                        >
+                          <AlbumBlockCircle
+                            image={music.images[0].url}
+                            name={music.name}
+                            who={music.type}
+                          />
+                        </div>
+                      ))
+                    : "Loading"}
+                </CarouselContent>
 
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
-        </Flex>
+                <CarouselPrevious />
+                <CarouselNext />
+              </Carousel>
+            </Flex>
+          </>
+        )}
       </Container>
       {playingTrack && artist && (
         <div
@@ -197,7 +151,7 @@ const ArtistPage = () => {
             preview={playingTrack.preview}
             title={playingTrack.spotifyTrackName}
             artist={artist.name}
-            audioImg={playingTrack.spotifyImg}
+            audioImg={playingTrack.spotifyImg!}
           />
         </div>
       )}

@@ -5,13 +5,21 @@ import { Search } from "lucide-react";
 import homeIcon from "../../img/home-icon.png";
 import { useNavigate } from "react-router-dom";
 import { useState, type ChangeEvent } from "react";
+import { useSelector } from "react-redux";
+import { getIsLoggedIn } from "@/app/store/userSlice";
+import NavProfile from "./navProfile";
 
 function NavBar() {
   const navigate = useNavigate();
+  const isLoggedin = useSelector(getIsLoggedIn());
   const [value, setValue] = useState("");
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
+  };
+
+  const openProfile = () => {
+    navigate(`/login`);
   };
 
   const handleSearch = (text: string) => {
@@ -62,10 +70,14 @@ function NavBar() {
         </Box>
       </Flex>
 
-      <Avatar>
-        <AvatarImage src={"https://github.com/shadcn.png"} />
-        <AvatarFallback>CN</AvatarFallback>
-      </Avatar>
+      {isLoggedin ? (
+        <NavProfile />
+      ) : (
+        <Avatar onClick={openProfile}>
+          <AvatarImage src={"https://github.com/shadcn.png"} />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+      )}
     </Flex>
   );
 }

@@ -9,13 +9,13 @@ import {
 import { useEffect, useState } from "react";
 import AlbumBlockCircle from "../common/albumBlock/albumBlock";
 import tracksService from "@/app/services/tracks.service";
-import { toast } from "react-toastify";
 import AudioPlayer from "./audioPlayer";
+import { useTrackPlayer } from "@/app/hooks/useTrackPlayer";
 
 const PopularTracks = () => {
   const [tracks, setTracks] = useState<SpotifyApi.TrackObjectFull[]>([]);
   const [loading, setLoading] = useState(true);
-  const [playingTrack, setPlayingTrack] = useState<any>();
+  const { playingTrack, getAudioForTrack } = useTrackPlayer();
 
   useEffect(() => {
     async function getTracks() {
@@ -26,35 +26,6 @@ const PopularTracks = () => {
     }
     getTracks();
   }, []);
-
-  const getAudioForTrack = async ({
-    name,
-    img,
-    artistName,
-  }: {
-    name: string;
-    img?: string;
-    artistName: string;
-  }) => {
-    try {
-      const audio = await tracksService.getAudioForTreckByNamePlusArtist(
-        name,
-        artistName
-      );
-      if (audio) {
-        setPlayingTrack({
-          ...audio,
-          spotifyImg: img,
-          spotifyTrackName: name,
-          artistName,
-        });
-      } else {
-        setPlayingTrack(null);
-      }
-    } catch (err) {
-      toast("Sorry not found track in base. Try another one ;)");
-    }
-  };
 
   return (
     <>
@@ -73,7 +44,7 @@ const PopularTracks = () => {
                   onClick={() =>
                     getAudioForTrack({
                       name: track.name,
-                      img: track.album.images[0].url,
+                      spotifyImg: track.album.images[0].url,
                       artistName: track.artists[0].name,
                     })
                   }
@@ -108,8 +79,8 @@ const PopularTracks = () => {
           <AudioPlayer
             preview={playingTrack.preview}
             title={playingTrack.spotifyTrackName}
-            artist={playingTrack.artistName}
-            audioImg={playingTrack.spotifyImg}
+            artist={playingTrack.artistName!}
+            audioImg={playingTrack.spotifyImg!}
           />
         </div>
       )}

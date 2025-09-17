@@ -1,9 +1,13 @@
 const express = require("express");
-const config = require("./config/default.json");
+const config = require("config");
+const mongoose = require("mongoose");
 const cors = require("cors");
 
 const app = express();
-const PORT = config.port || 8080;
+const PORT = config.get("port") ?? 8080;
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
 const trackRoutes = require("./routes/tracks.routes");
@@ -18,6 +22,23 @@ app.use("/album", albumRouter);
 const playlistRouter = require("./routes/playlists.routes");
 app.use("/playlist", playlistRouter);
 
-app.listen(PORT, () =>
-  console.log(`🚀 Сервер запущен на http://localhost:${PORT}`)
-);
+const authRouter = require("./routes/auth.routes");
+app.use("/auth", authRouter);
+
+const userRouter = require("./routes/user.routes");
+app.use("/user", userRouter);
+
+async function start() {
+  try {
+    await mongoose.connect(config.get("mongoUri"));
+    console.log(`MongoDB connected.`);
+    app.listen(PORT, () =>
+      console.log(`🚀 Server has been started on port ${PORT}...`)
+    );
+  } catch (e) {
+    console.log(e.message);
+    process.exit(1);
+  }
+}
+
+start();

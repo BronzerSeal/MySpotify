@@ -1,6 +1,8 @@
 {
   "port": 8080,
-  "mongoUri": "mongodb+srv://arthur:123@jfd-fs.zid4lsx.mongodb.net/?retryWrites=true&w=majority&appName=jfd-fs",
+  "mongoUri": "url",
   "SPOTIFY_CLIENT_ID": "SPOTIFY_CLIENT_ID",
-  "SPOTIFY_CLIENT_SECRET": "SPOTIFY_CLIENT_SECRET"
+  "SPOTIFY_CLIENT_SECRET": "SPOTIFY_CLIENT_SECRET",
+  "accessSecret": "pfopcmzi87",
+  "refreshSecret": "saIoxckz980122"
 }

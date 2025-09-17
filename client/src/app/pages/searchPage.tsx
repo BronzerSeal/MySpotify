@@ -5,8 +5,6 @@ import { useEffect, useState } from "react";
 import artistService from "../services/artists.service";
 import SearchTrackLine from "../components/common/search/searchTracks/searchtrackLine";
 import AudioPlayer from "../components/ui/audioPlayer";
-import tracksService from "../services/tracks.service";
-import { toast } from "react-toastify";
 import {
   Carousel,
   CarouselContent,
@@ -14,6 +12,7 @@ import {
   CarouselPrevious,
 } from "../components/common/carousel";
 import AlbumBlockCircle from "../components/common/albumBlock/albumBlock";
+import { useTrackPlayer } from "../hooks/useTrackPlayer";
 
 type SearchTrack = {
   id: string;
@@ -28,9 +27,9 @@ const SearchPage = () => {
   const navigate = useNavigate();
   const [artist, setArtist] = useState<SpotifyApi.ArtistObjectFull>();
   const [popularTracks, setPopularTracks] = useState<SearchTrack[]>();
-  const [playingTrack, setPlayingTrack] = useState<any>();
   const [artistMusic, setArtistMusic] =
     useState<SpotifyApi.AlbumObjectFull[]>();
+  const { playingTrack, getAudioForTrack } = useTrackPlayer();
 
   const handleCardClick = (id: string) => {
     navigate(`/artist/${id}`, {
@@ -70,34 +69,6 @@ const SearchPage = () => {
     getMusic();
   }, [artist]);
 
-  const getAudioForTrack = async ({
-    name,
-    img,
-    artistName,
-  }: {
-    name: string;
-    img?: string;
-    artistName: string;
-  }) => {
-    try {
-      const audio = await tracksService.getAudioForTreckByNamePlusArtist(
-        name,
-        artistName
-      );
-      if (audio) {
-        setPlayingTrack({
-          ...audio,
-          spotifyImg: img,
-          spotifyTrackName: name,
-        });
-      } else {
-        setPlayingTrack(null);
-      }
-    } catch (err) {
-      toast("Sorry not found track in base. Try another one ;)");
-    }
-  };
-
   return (
     <>
       <Container
@@ -135,7 +106,7 @@ const SearchPage = () => {
                 onClick={() =>
                   getAudioForTrack({
                     name: track.name,
-                    img: track.image,
+                    spotifyImg: track.image,
                     artistName: track.artistName,
                   })
                 }
@@ -189,7 +160,7 @@ const SearchPage = () => {
             preview={playingTrack.preview}
             title={playingTrack.spotifyTrackName}
             artist={artist.name}
-            audioImg={playingTrack.spotifyImg}
+            audioImg={playingTrack.spotifyImg!}
           />
         </div>
       )}

@@ -5,19 +5,26 @@ import ArtistPage from "./app/pages/artistPage";
 import { ToastContainer } from "react-toastify";
 import SearchPage from "./app/pages/searchPage";
 import AlbumPage from "./app/pages/albumPage";
+import Login from "./app/pages/login";
+import AppLoader from "./app/components/ui/hoc/appLoader";
+import UserPage from "./app/pages/userPage";
 
 function App() {
   return (
     <>
       <BrowserRouter>
-        <NavBar />
+        <AppLoader>
+          <NavBar />
 
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/artist/:id" element={<ArtistPage />} />
-          <Route path="/search/:text" element={<SearchPage />} />
-          <Route path="/album/:id" element={<AlbumPage />} />
-        </Routes>
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/artist/:id" element={<ArtistPage />} />
+            <Route path="/search/:text" element={<SearchPage />} />
+            <Route path="/album/:id" element={<AlbumPage />} />
+            <Route path="/user/:id" element={<UserPage />} />
+          </Routes>
+        </AppLoader>
 
         <ToastContainer />
       </BrowserRouter>

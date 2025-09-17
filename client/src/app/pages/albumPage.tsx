@@ -4,16 +4,15 @@ import albumsService from "../services/albums.service";
 import Balatro from "../components/common/Balatro/Balatro";
 import { Container, Flex, Text } from "@radix-ui/themes";
 import TrackLineAlbum from "../components/common/trackLine/trackLineAlbum";
-import tracksService from "../services/tracks.service";
-import { toast } from "react-toastify";
 import AudioPlayer from "../components/ui/audioPlayer";
 import { Vibrant } from "node-vibrant/browser";
+import { useTrackPlayer } from "../hooks/useTrackPlayer";
 
 const AlbumPage = () => {
   const { id } = useParams<{ id: string }>();
   const [album, setAlbum] = useState<SpotifyApi.AlbumObjectFull>();
-  const [playingTrack, setPlayingTrack] = useState<any>();
   const [bgColors, setbgColors] = useState<string[]>();
+  const { playingTrack, getAudioForTrack } = useTrackPlayer();
 
   useEffect(() => {
     if (album) {
@@ -38,31 +37,6 @@ const AlbumPage = () => {
     }
     getAlbum();
   }, []);
-
-  const getAudioForTrack = async ({
-    name,
-    artistName,
-  }: {
-    name: string;
-    artistName: string;
-  }) => {
-    try {
-      const audio = await tracksService.getAudioForTreckByNamePlusArtist(
-        name,
-        artistName
-      );
-      if (audio) {
-        setPlayingTrack({
-          ...audio,
-          spotifyTrackName: name,
-        });
-      } else {
-        setPlayingTrack(null);
-      }
-    } catch (err) {
-      toast("Sorry not found track in base. Try another one ;)");
-    }
-  };
 
   return (
     <>

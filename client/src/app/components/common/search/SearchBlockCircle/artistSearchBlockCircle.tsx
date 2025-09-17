@@ -19,7 +19,6 @@ const ArtistSearchBlockCircle: FC<ArtistBlockProps> = ({
       width={"350px"}
       height={"220px"}
       style={{
-        // background: "#28292eff",
         borderRadius: "10px",
         position: "relative",
       }}
