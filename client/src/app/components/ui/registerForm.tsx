@@ -13,41 +13,57 @@ import { Input } from "../common/input";
 import { Checkbox } from "../common/checkbox";
 import { Flex, Text } from "@radix-ui/themes";
 import { useEffect, useState, type FC, type FormEvent } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { validator } from "@/app/utils/validator";
 import { signUp } from "@/app/store/userSlice";
 import { useNavigate } from "react-router";
 import type { AppDispatch } from "@/app/store/store";
+import { getGenres } from "@/app/store/genreSlice";
+import { MultiSelect } from "../common/MultiSelect";
 
 type RegisterFormProps = {
   onClick: () => void;
 };
 
-export type FormFieldName = "email" | "password" | "name" | "licence";
+type Genre = {
+  _id?: string;
+  name: string;
+  color: string;
+};
+
+export type FormFieldName =
+  | "email"
+  | "password"
+  | "name"
+  | "licence"
+  | "genres";
 
 export type ChangeTarget = {
   name: FormFieldName;
-  value: string | boolean;
+  value: string | boolean | Genre[];
 };
 
 type DataState = {
   email: string;
   password: string;
   name: string;
+  genres: Genre[];
   licence: boolean;
 };
-
 export type ErrorsState = Partial<Record<keyof DataState, string>>;
 
 const RegisterForm: FC<RegisterFormProps> = ({ onClick }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const [data, setData] = useState({
+  const [data, setData] = useState<DataState>({
     email: "",
     password: "",
     name: "",
+    genres: [],
     licence: false,
   });
   const navigate = useNavigate();
+
+  const genres = useSelector(getGenres());
 
   const [errors, setErrors] = useState<ErrorsState>({
     password: "",
@@ -122,10 +138,10 @@ const RegisterForm: FC<RegisterFormProps> = ({ onClick }) => {
     e.preventDefault();
     const isValid = validate();
     if (!isValid) return;
-    console.log(data);
 
     dispatch(signUp({ ...data }, "/", navigate));
   };
+  console.log(data);
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
@@ -193,6 +209,15 @@ const RegisterForm: FC<RegisterFormProps> = ({ onClick }) => {
                 <Text as="p" color="red" size={"2"}>
                   {errors.password}
                 </Text>
+              )}
+              {genres && (
+                <MultiSelect
+                  options={genres}
+                  value={data.genres}
+                  onChange={(selected) =>
+                    handleChange({ name: "genres", value: selected })
+                  }
+                />
               )}
             </div>
             <Flex gap={"3"}>

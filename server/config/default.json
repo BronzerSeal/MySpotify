@@ -1,6 +1,6 @@
 {
   "port": 8080,
-  "mongoUri": "url",
+  "mongoUri": "mongoUri",
   "SPOTIFY_CLIENT_ID": "SPOTIFY_CLIENT_ID",
   "SPOTIFY_CLIENT_SECRET": "SPOTIFY_CLIENT_SECRET",
   "accessSecret": "pfopcmzi87",

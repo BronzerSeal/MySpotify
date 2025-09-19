@@ -17,7 +17,7 @@ router.patch("/:userId", auth, async (req, res) => {
     }
   } catch (e) {
     res.status(500).json({
-      message: "На сервере произошла ошибка. Попробуйте позже",
+      message: `На сервере произошла ошибка: ${e}. Попробуйте позже`,
     });
   }
 });
@@ -34,7 +34,7 @@ router.get("/:userId", auth, async (req, res) => {
     res.send(user);
   } catch (e) {
     res.status(500).json({
-      message: "На сервере произошла ошибка. Попробуйте позже",
+      message: `На сервере произошла ошибка: ${e}. Попробуйте позже`,
     });
   }
 });

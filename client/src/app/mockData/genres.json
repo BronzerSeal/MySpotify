@@ -1,0 +1,22 @@
+[
+  {
+    "_id": "67rdca3eeb7f6fgeed471198",
+    "name": "rock",
+    "color": "red"
+  },
+  {
+    "_id": "67rdca3eeb7f6fgeed471100",
+    "name": "Energy",
+    "color": "#0089FF"
+  },
+  {
+    "_id": "67rdca3eeb7f6fgeed4711012",
+    "name": "hip-hop",
+    "color": "#8B00FF"
+  },
+  {
+    "_id": "67rdca3eeb7f6fgeed471101",
+    "name": "jazz",
+    "color": "FFBA00"
+  }
+]

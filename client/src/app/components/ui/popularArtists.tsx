@@ -49,6 +49,7 @@ const PopularArtists = () => {
                 onClick={() => handleCardClick(artist.id)}
               >
                 <ArtistBlockCircle
+                  variant="normal"
                   image={
                     artist.images[1]?.url || "https://github.com/shadcn.png"
                   }

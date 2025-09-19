@@ -1,3 +1,4 @@
+import { loadGenresList } from "@/app/store/genreSlice";
 import type { AppDispatch } from "@/app/store/store";
 import {
   getIsLoggedIn,
@@ -13,6 +14,7 @@ const AppLoader = ({ children }: { children: ReactNode }) => {
   const userStatusLoading = useSelector(getUsersLoadingStatus());
 
   useEffect(() => {
+    dispatch(loadGenresList());
     if (isLoggedIn) {
       dispatch(loadUserList());
     }

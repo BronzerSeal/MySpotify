@@ -1,6 +1,12 @@
 import httpUserService from "./http.user.service";
 import localStorageService from "./localStorage.service";
 
+export type Genre = {
+  color: string;
+  name: string;
+  _id: string;
+};
+
 export type User = {
   createdAt: string;
   email: string;
@@ -8,8 +14,11 @@ export type User = {
   name: string;
   password: string;
   updatedAt: string;
+  genres: Genre[];
   __v: number;
   _id: string;
+  dopInfo?: string;
+  favouriteArtists?: string[];
 };
 const userEndpoint = "user/";
 
@@ -18,7 +27,7 @@ const userService = {
     const { data } = await httpUserService.get(userEndpoint);
     return data;
   },
-  create: async (payload) => {
+  create: async (payload: User) => {
     const { data } = await httpUserService.put(
       userEndpoint + payload._id,
       payload
@@ -31,7 +40,7 @@ const userService = {
     );
     return data;
   },
-  update: async (payload) => {
+  update: async (payload: User) => {
     const { data } = await httpUserService.patch(
       userEndpoint + localStorageService.getUserId(),
       payload

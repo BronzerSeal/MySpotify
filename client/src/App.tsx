@@ -8,6 +8,7 @@ import AlbumPage from "./app/pages/albumPage";
 import Login from "./app/pages/login";
 import AppLoader from "./app/components/ui/hoc/appLoader";
 import UserPage from "./app/pages/userPage";
+import UserEditPage from "./app/pages/userEditPage";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="/search/:text" element={<SearchPage />} />
             <Route path="/album/:id" element={<AlbumPage />} />
             <Route path="/user/:id" element={<UserPage />} />
+            <Route path="/user/:id/edit" element={<UserEditPage />} />
           </Routes>
         </AppLoader>
 

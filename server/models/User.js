@@ -1,5 +1,10 @@
 const { Schema, model } = require("mongoose");
 
+const genreSchema = new Schema({
+  name: { type: String, required: true },
+  color: { type: String, required: true },
+});
+
 const schema = new Schema(
   {
     name: { type: String },
@@ -7,6 +12,9 @@ const schema = new Schema(
     password: { type: String },
     image: String,
     sex: { type: String, enum: ["male", "female", "other"] },
+    genres: [genreSchema],
+    dopInfo: { type: String },
+    favouriteArtists: [String],
   },
   {
     timestamps: true,

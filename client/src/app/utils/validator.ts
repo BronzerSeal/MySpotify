@@ -1,6 +1,30 @@
-export const validator = (data, config) => {
+type ValidationMethod =
+  | "isRequired"
+  | "isEmail"
+  | "isCapitalSymbol"
+  | "isContainDigit"
+  | "min";
+
+interface ValidationRule {
+  message: string;
+  value?: number;
+}
+
+type ValidationConfig = Record<
+  string,
+  Record<ValidationMethod, ValidationRule>
+>;
+
+export const validator = (
+  data: Record<string, any>,
+  config: ValidationConfig
+) => {
   const errors = {};
-  function validate(validateMethod, data, config) {
+  function validate(
+    validateMethod: ValidationMethod,
+    data: any,
+    config: ValidationConfig
+  ) {
     let statusValidate;
     switch (validateMethod) {
       case "isRequired": {

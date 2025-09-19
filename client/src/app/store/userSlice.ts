@@ -4,7 +4,7 @@ import authService from "../services/auth.service";
 import type { NavigateFunction } from "react-router-dom";
 import generateAuthError from "../utils/generateAuthError";
 import type { RootState } from "./store";
-import userService from "../services/user.service";
+import userService, { type User } from "../services/user.service";
 
 type loginPayload = {
   email: string;
@@ -124,12 +124,11 @@ export const signUp =
     }
   };
 
-export const logOut =
-  (redirect: string, navigate: NavigateFunction) => (dispatch: Dispatch) => {
-    localStorageService.removeAuthData();
-    dispatch(userLoggedOut());
-    navigate(redirect);
-  };
+export const logOut = (navigate: NavigateFunction) => (dispatch: Dispatch) => {
+  localStorageService.removeAuthData();
+  dispatch(userLoggedOut());
+  navigate("/");
+};
 
 export const loadUserList = () => async (dispatch: Dispatch) => {
   dispatch(userRequested());
@@ -142,12 +141,12 @@ export const loadUserList = () => async (dispatch: Dispatch) => {
 };
 
 export const updateUser =
-  (payload, navigate: NavigateFunction) => async (dispatch: Dispatch) => {
+  (payload: User, navigate: NavigateFunction) => async (dispatch: Dispatch) => {
     dispatch(userUpdateRequested());
     try {
       const { content } = await userService.update(payload);
       dispatch(userUpdateSuccessed(content));
-      navigate(`/users/${content._id}`);
+      navigate(`/user/${content._id}`);
     } catch (error: any) {
       dispatch(userUpdateFailed(error.message));
     }

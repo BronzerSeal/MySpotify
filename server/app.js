@@ -28,6 +28,9 @@ app.use("/auth", authRouter);
 const userRouter = require("./routes/user.routes");
 app.use("/user", userRouter);
 
+const genreRouter = require("./routes/genre.routes");
+app.use("/genre", genreRouter);
+
 async function start() {
   try {
     await mongoose.connect(config.get("mongoUri"));
