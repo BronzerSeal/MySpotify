@@ -39,7 +39,16 @@ const PopularTracks = () => {
         <Carousel opts={{ align: "start" }} className="w-full max-w-[1200px]">
           <CarouselContent>
             {tracks.map((track) => (
-              <CarouselItem key={track.id} className="basis-1/6">
+              <CarouselItem
+                key={track.id}
+                className="
+    basis-1/2 
+    sm:basis-1/3 
+    md:basis-1/4 
+    lg:basis-1/5 
+    xl:basis-1/6
+  "
+              >
                 <div
                   onClick={() =>
                     getAudioForTrack({

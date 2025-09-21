@@ -18,7 +18,7 @@ export type User = {
   __v: number;
   _id: string;
   dopInfo?: string;
-  favouriteArtists?: string[];
+  favouriteArtists: string[];
 };
 const userEndpoint = "user/";
 
