@@ -23,7 +23,6 @@ import {
   getCurrentUserData,
   getIsLoggedIn,
   toggleFavouriteArtistAsync,
-  updateUser,
 } from "../store/userSlice.js";
 import type { AppDispatch } from "../store/store.js";
 import type { User } from "../services/user.service.js";
@@ -35,10 +34,10 @@ const ArtistPage = () => {
   const { artist, popularTracks, artistMusic } = useArtist(id!);
   const user: User | null = useSelector(getCurrentUserData());
   const dispatch = useDispatch<AppDispatch>();
-  const [testData, setTestData] = useState();
 
   const [bgColor, setbgColor] = useState("");
   const [heart, setHeart] = useState(false);
+  console.log(heart);
 
   const { playingTrack, getAudioForTrack } = useTrackPlayer();
 

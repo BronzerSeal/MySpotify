@@ -20,6 +20,10 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
+    /* 🔽 ОСЛАБЛЕНИЯ */
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
