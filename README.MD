@@ -96,8 +96,9 @@ cors, helmet, morgan (middleware)
 🎶 Создание и сохранение плейлистов
 📊 История прослушивания
 
-# 🌍 Деплой (Vercel + Render)
-https://my-spotify-zeta-blue.vercel.app/
+# 🌍 Деплой (Vercel + Render) Деплой
+Vercel: https://my-spotify-zeta-blue.vercel.app/
+
 
 👤 Автор
 Arthur Beglaryan
