@@ -1,10 +1,10 @@
+require("dotenv").config();
 const express = require("express");
-const config = require("config");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
 const app = express();
-const PORT = config.get("port") ?? 8080;
+const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -33,7 +33,7 @@ app.use("/genre", genreRouter);
 
 async function start() {
   try {
-    await mongoose.connect(config.get("mongoUri"));
+    await mongoose.connect(process.env.MONGO_URI);
     console.log(`MongoDB connected.`);
     app.listen(PORT, () =>
       console.log(`🚀 Server has been started on port ${PORT}...`)

@@ -3,7 +3,7 @@ import localStorageService from "../services/localStorage.service";
 import authService from "../services/auth.service";
 import type { NavigateFunction } from "react-router-dom";
 import generateAuthError from "../utils/generateAuthError";
-import type { RootState } from "./store";
+import type { AppDispatch, RootState } from "./store";
 import userService, { type User } from "../services/user.service";
 
 type loginPayload = {
@@ -12,7 +12,16 @@ type loginPayload = {
   stayOn: boolean;
 };
 
-const initialState = localStorageService.getAccessToken()
+type UsersState = {
+  entity: User | null;
+  isLoading: boolean;
+  error: string | null;
+  auth: { userId: string | null } | null;
+  isLoggedIn: boolean;
+  dataLoaded: boolean;
+};
+
+const initialState: UsersState = localStorageService.getAccessToken()
   ? {
       entity: null,
       isLoading: true,
@@ -62,6 +71,23 @@ const usersSlice = createSlice({
     userUpdateSuccessed: (state, action) => {
       state.entity = action.payload;
     },
+    toggleFavouriteArtist: (state, action) => {
+      if (!state.entity) return;
+      const artistId = action.payload;
+
+      const exists = state.entity.favouriteArtists?.includes(artistId);
+
+      if (exists) {
+        state.entity.favouriteArtists = state.entity.favouriteArtists!.filter(
+          (id: string) => id !== artistId
+        );
+      } else {
+        state.entity.favouriteArtists = [
+          ...(state.entity.favouriteArtists || []),
+          artistId,
+        ];
+      }
+    },
   },
 });
 
@@ -74,6 +100,7 @@ const {
   authRequestSuccess,
   userLoggedOut,
   userUpdateSuccessed,
+  toggleFavouriteArtist,
 } = actions;
 
 const authRequested = createAction("users/authRequested");
@@ -141,14 +168,32 @@ export const loadUserList = () => async (dispatch: Dispatch) => {
 };
 
 export const updateUser =
-  (payload: User, navigate: NavigateFunction) => async (dispatch: Dispatch) => {
+  (payload: User, navigate?: NavigateFunction) =>
+  async (dispatch: Dispatch) => {
     dispatch(userUpdateRequested());
     try {
       const { content } = await userService.update(payload);
       dispatch(userUpdateSuccessed(content));
-      navigate(`/user/${content._id}`);
+      if (navigate) {
+        navigate(`/user/${content._id}`);
+      }
     } catch (error: any) {
       dispatch(userUpdateFailed(error.message));
+    }
+  };
+
+export const toggleFavouriteArtistAsync =
+  (artistId: string) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    dispatch(toggleFavouriteArtist(artistId));
+
+    const user = getState().users.entity;
+    if (!user) return;
+
+    try {
+      await dispatch(updateUser(user));
+    } catch (error) {
+      console.error("Не удалось обновить пользователя", error);
     }
   };
 

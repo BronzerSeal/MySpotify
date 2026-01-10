@@ -2,32 +2,54 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Vibrant } from "node-vibrant/browser";
 import Silk from "../components/common/Silk.js";
+import { motion } from "framer-motion";
 import { Container, Flex, Text } from "@radix-ui/themes";
 import { Badge } from "../components/common/badge.js";
-import { BadgeCheckIcon } from "lucide-react";
+import { BadgeCheckIcon, Heart } from "lucide-react";
 import TrackLine from "../components/common/trackLine/trackLine.js";
 import AlbumBlockCircle from "../components/common/albumBlock/albumBlock.js";
 import {
   Carousel,
   CarouselContent,
+  CarouselItem,
   CarouselNext,
   CarouselPrevious,
 } from "../components/common/carousel";
 import AudioPlayer from "../components/ui/audioPlayer.js";
 import { useTrackPlayer } from "../hooks/useTrackPlayer.js";
 import { useArtist } from "../hooks/useArtist.js";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getCurrentUserData,
+  getIsLoggedIn,
+  toggleFavouriteArtistAsync,
+  updateUser,
+} from "../store/userSlice.js";
+import type { AppDispatch } from "../store/store.js";
+import type { User } from "../services/user.service.js";
 
 const ArtistPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const isLoggedin = useSelector(getIsLoggedIn());
   const { artist, popularTracks, artistMusic } = useArtist(id!);
+  const user: User | null = useSelector(getCurrentUserData());
+  const dispatch = useDispatch<AppDispatch>();
+  const [testData, setTestData] = useState();
 
   const [bgColor, setbgColor] = useState("");
+  const [heart, setHeart] = useState(false);
 
   const { playingTrack, getAudioForTrack } = useTrackPlayer();
 
   const handleAlbumClick = (id: string) => {
     navigate(`/album/${id}`);
+  };
+
+  const toggleHeart = () => {
+    setHeart((PrevState) => !PrevState);
+    if (!id) return;
+    dispatch(toggleFavouriteArtistAsync(id));
   };
 
   useEffect(() => {
@@ -73,6 +95,30 @@ const ArtistPage = () => {
             {artist ? artist.name : "Artist"}
           </h1>
           <p>{artist ? artist.followers.total : 0} listeners per month</p>
+          {isLoggedin && (
+            <Flex align="center" justify={"center"} gap="2">
+              <motion.button
+                onClick={toggleHeart}
+                whileTap={{ scale: 0.85 }}
+                whileHover={{ scale: 1.1 }}
+                className="p-1 rounded-full transition-colors"
+              >
+                <Heart
+                  className={`h-6 w-6 transition-colors ${
+                    user?.favouriteArtists?.includes(id!)
+                      ? "text-red-500 fill-red-500"
+                      : ""
+                  }`}
+                />
+              </motion.button>
+              <Text
+                as="p"
+                className="font-semibold text-lg tracking-tight text-white"
+              >
+                Subscribe
+              </Text>
+            </Flex>
+          )}
         </div>
       </div>
       <Container mt={"3"} pb={"9"}>
@@ -101,7 +147,6 @@ const ArtistPage = () => {
               </div>
             ))
           : "Loading"}
-
         {artistMusic.length > 0 && (
           <>
             <Text as="div" size={"6"} weight={"bold"} mt={"5"} mb={"2"}>
@@ -115,16 +160,27 @@ const ArtistPage = () => {
                 <CarouselContent>
                   {artistMusic
                     ? artistMusic.map((music, index) => (
-                        <div
+                        <CarouselItem
                           key={index}
-                          onClick={() => handleAlbumClick(music.id)}
+                          className="
+            basis-1/2 
+            sm:basis-1/3 
+            md:basis-1/4 
+            lg:basis-1/5 
+            xl:basis-1/6
+          "
                         >
-                          <AlbumBlockCircle
-                            image={music.images[0].url}
-                            name={music.name}
-                            who={music.type}
-                          />
-                        </div>
+                          <div
+                            key={index}
+                            onClick={() => handleAlbumClick(music.id)}
+                          >
+                            <AlbumBlockCircle
+                              image={music.images[0].url}
+                              name={music.name}
+                              who={music.type}
+                            />
+                          </div>
+                        </CarouselItem>
                       ))
                     : "Loading"}
                 </CarouselContent>

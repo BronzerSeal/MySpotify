@@ -7,7 +7,6 @@ type Genre = {
 };
 
 const Genres = ({ genres }: { genres: Genre[] }) => {
-  console.log(genres);
   return (
     <SpotlightCard padding={6}>
       <Flex
