@@ -1,8 +1,7 @@
+require("dotenv").config();
 const axios = require("axios");
-const config = require("../config/default.json");
 
-const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } = config;
-
+const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } = process.env;
 let accessToken = "";
 let tokenExpiresAt = 0;
 
