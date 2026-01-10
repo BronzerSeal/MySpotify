@@ -1,10 +1,11 @@
 import axios from "axios";
-import config from "../config.json";
 import localStorageService from "./localStorage.service";
 
 const httpAuth = axios.create({
-  baseURL: config.apiEndpoint + "auth/",
+  baseURL: import.meta.env.VITE_API_ENDPOINT + "auth/",
 });
+
+console.log("URL: ", import.meta.env.VITE_API_ENDPOINT + "auth/");
 
 type RegisterPayload = {
   email: string;

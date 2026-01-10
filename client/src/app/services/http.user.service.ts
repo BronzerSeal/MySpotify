@@ -1,10 +1,9 @@
 import axios from "axios";
-import config from "../config.json";
 import localStorageService from "./localStorage.service";
 import authService from "./auth.service";
 
 const http = axios.create({
-  baseURL: config.apiEndpoint,
+  baseURL: import.meta.env.VITE_API_ENDPOINT,
 });
 
 http.interceptors.request.use(

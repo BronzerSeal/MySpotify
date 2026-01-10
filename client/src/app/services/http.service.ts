@@ -1,8 +1,7 @@
 import axios from "axios";
-import config from "../config.json";
 
 const http = axios.create({
-  baseURL: config.apiEndpoint,
+  baseURL: import.meta.env.VITE_API_ENDPOINT,
 });
 
 const httpService = {
