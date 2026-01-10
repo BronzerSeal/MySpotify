@@ -40,9 +40,8 @@ MySpotify/
 
 ## ⚙️ Установка и запуск
 
-### 1. Клонирование проекта
-
 ```bash
+### 1. Клонирование проекта
 git clone https://github.com/username/MySpotify.git
 cd MySpotify
 2. Установка зависимостей
@@ -75,7 +74,7 @@ npm run dev
 После запуска проект будет доступен по адресу:
 👉 Клиент: http://localhost:5173
 👉 API: http://localhost:8080
-
+```
 # 🛠 Технологии
 Фронтенд:
 React 18
@@ -103,9 +102,10 @@ Vercel: https://my-spotify-zeta-blue.vercel.app/
 👤 Автор
 Arthur Beglaryan
 
+# DopInfo
 to run the project you need to:
 
 1. Create a spotify account and go to spotify web api
 2. Create an application in it
 3. replace SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET with yours
-```
+
