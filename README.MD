@@ -102,10 +102,13 @@ Vercel: https://my-spotify-zeta-blue.vercel.app/
 👤 Автор
 Arthur Beglaryan
 
-# DopInfo
-to run the project you need to:
 
-1. Create a spotify account and go to spotify web api
-2. Create an application in it
-3. replace SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET with yours
+(P.s при заходе на деплой нужно подождать около 1-2,5 минуты для запуска сервера) 
+# DopInfo
+Для запуска проекта вам необходимо:
+
+1. Создайте учетную запись Spotify и перейдите на веб-API Spotify.
+2. Создайте в ней приложение.
+3. Замените SPOTIFY_CLIENT_ID и SPOTIFY_CLIENT_SECRET на свои.
+
 
